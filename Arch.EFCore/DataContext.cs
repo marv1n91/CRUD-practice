@@ -11,7 +11,19 @@ public class DataContext : DbContext
         optionsBuilder.EnableSensitiveDataLogging();
         base.OnConfiguring(optionsBuilder);
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Note>()
+            .HasOne(x => x.User)
+            .WithMany(x => x.Notes)
+            .HasForeignKey(x => x.UserId)
+            .IsRequired();
+
+        base.OnModelCreating(modelBuilder);
+    }
     
     public DbSet<Student> Students => Set<Student>();
     public DbSet<Note> Notes => Set<Note>();
+    public DbSet<User> Users => Set<User>();
 }
